@@ -1,0 +1,98 @@
+<aura:component controller="ConnectionManager">
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <aura:attribute name="isModalOpen" type="Boolean" default="false" />
+    <aura:attribute name="contactOptions" type="List" />
+    <aura:attribute name="accountOptions" type="List" />
+    <aura:attribute name="opportunityOptions" type="List" />
+    <aura:attribute name="connections" type="List" />
+
+    <aura:attribute name="contactId" type="String" />
+    <aura:attribute name="accountId" type="String" />
+    <aura:attribute name="opportunityId" type="String" />
+
+    <lightning:card title="Connection Manager" iconName="utility:connected_apps">
+        <aura:set attribute="actions">
+            <lightning:button label="New Connection" onclick="{!c.openModal}" />
+        </aura:set>
+
+        
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                <thead>
+                    <tr class="slds-line-height_reset">
+                        <th scope="col"><div class="slds-truncate" title="Contact Name">Contact Name</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Account Name">Account Name</div></th>
+                        <th scope="col"><div class="slds-truncate" title="Opportunity Name">Opportunity Name</div></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <aura:iteration items="{!v.connections}" var="conn">
+                        <tr>
+                            <td>{!conn.ContactName}</td>
+                            <td>{!conn.AccountName}</td>
+                            <td>{!conn.OpportunityName}</td>
+                        </tr>
+                    </aura:iteration>
+                </tbody>
+            </table>
+        
+        
+
+
+        <aura:if isTrue="{!v.isModalOpen}">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="{!c.closeModal}">
+                            <lightning:icon iconName="utility:close" size="small" />
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">New Connection</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <div class="slds-form-element">
+                            <label class="slds-form-element__label" for="contact-select">Contact</label>
+                            <div class="slds-form-element__control">
+                                <lightning:select name="contact" label="" value="{!v.contactId}" onchange="{!c.handleContactChange}" required="true">
+                                    <option value="">-- Select Contact --</option>
+                                    <aura:iteration items="{!v.contactOptions}" var="option">
+                                        <option value="{!option.value}">{!option.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </div>
+                        </div>
+
+                        <div class="slds-form-element slds-m-top_medium">
+                            <label class="slds-form-element__label" for="account-select">Account</label>
+                            <div class="slds-form-element__control">
+                                <lightning:select name="account" label="" value="{!v.accountId}" onchange="{!c.handleAccountChange}" required="true">
+                                    <option value="">-- Select Account --</option>
+                                    <aura:iteration items="{!v.accountOptions}" var="option">
+                                        <option value="{!option.value}">{!option.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </div>
+                        </div>
+
+                        <div class="slds-form-element slds-m-top_medium">
+                            <label class="slds-form-element__label" for="opportunity-select">Opportunity</label>
+                            <div class="slds-form-element__control">
+                                <lightning:select name="opportunity" label="" value="{!v.opportunityId}" onchange="{!c.handleOpportunityChange}" required="true">
+                                    <option value="">-- Select Opportunity --</option>
+                                    <aura:iteration items="{!v.opportunityOptions}" var="option">
+                                        <option value="{!option.value}">{!option.label}</option>
+                                    </aura:iteration>
+                                </lightning:select>
+                            </div>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="Cancel" onclick="{!c.closeModal}"/>
+                        <lightning:button variant="brand" label="Save" onclick="{!c.saveConnection}"/>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </aura:if>
+    </lightning:card>
+</aura:component>
